@@ -1,8 +1,6 @@
 # Work-path
 
-##
-##Topic 1 | Arrays & Strings
-##
+## Topic 1 | Arrays & Strings
 ##### - A Very Big Sum
 https://www.hackerrank.com/challenges/a-very-big-sum/problem
 
@@ -13,7 +11,7 @@ https://www.hackerrank.com/challenges/designer-pdf-viewer/problem
 https://www.hackerrank.com/challenges/ctci-array-left-rotation/problem
 
 ##
-##Topic 2 | Lists
+## Topic 2 | Lists
 ##### - Insert a node at a specific position in a linked list
 https://www.hackerrank.com/challenges/insert-a-node-at-a-specific-position-in-a-linked-list/problem
 
@@ -21,7 +19,7 @@ https://www.hackerrank.com/challenges/insert-a-node-at-a-specific-position-in-a-
 https://www.hackerrank.com/challenges/detect-whether-a-linked-list-contains-a-cycle/problem
 
 ##
-###Topic 3 | Stacks & Queues
+### Topic 3 | Stacks & Queues
 ##### - Balanced Brackets
 https://www.hackerrank.com/challenges/balanced-brackets/problem
 
@@ -29,7 +27,7 @@ https://www.hackerrank.com/challenges/balanced-brackets/problem
 https://www.hackerrank.com/challenges/queue-using-two-stacks/problem
 
 ##
-###Topic 4 | Hash & Maps
+### Topic 4 | Hash & Maps
 ##### - Ice Cream Parlor
 https://www.hackerrank.com/challenges/icecream-parlor/problem
 
@@ -37,7 +35,7 @@ https://www.hackerrank.com/challenges/icecream-parlor/problem
 https://algorithms.tutorialhorizon.com/colorful-numbers/
 
 ##
-###Topic 5 | Sorting Algorithms
+### Topic 5 | Sorting Algorithms
 ##### - Insertion Sort - Part 2
 https://www.hackerrank.com/challenges/insertionsort2/problem
 
@@ -48,7 +46,7 @@ https://www.hackerrank.com/challenges/quicksort1/problem
 https://www.hackerrank.com/challenges/quicksort2/problem
 
 ##
-###Topic 6 | Trees
+### Topic 6 | Trees
 ##### - Binary Search Tree : Insertion
 https://www.hackerrank.com/challenges/binary-search-tree-insertion/problem
 
@@ -59,7 +57,7 @@ https://www.hackerrank.com/challenges/tree-height-of-a-binary-tree/problem
 https://www.hackerrank.com/challenges/qheap1/problem
 
 ##
-###Topic 7 | Graphs (BFS & DFS)
+### Topic 7 | Graphs (BFS & DFS)
 ##### - Breadth First Search: Shortest Reach
 https://www.hackerrank.com/challenges/bfsshortreach/problem
 
@@ -67,7 +65,7 @@ https://www.hackerrank.com/challenges/bfsshortreach/problem
 https://www.hackerrank.com/challenges/the-quickest-way-up/problem
 
 ##
-###Topic 8 | Recursion
+### Topic 8 | Recursion
 ##### - Fibonacci Numbers
 https://www.hackerrank.com/challenges/functional-programming-warmups-in-recursion---fibonacci-numbers/problem
 
