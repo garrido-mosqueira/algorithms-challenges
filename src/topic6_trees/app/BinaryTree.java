@@ -31,6 +31,31 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 
     @Override
     public void traversal() {
+        if (root != null) {
+//            travers(root);
+            inOrderTraversal(root);
+        }
+    }
+
+    private void inOrderTraversal(final Node<T> node) {
+        if (node.getLeft() != null) {
+            inOrderTraversal(node.getLeft());
+        }
+
+        System.out.print(node + " -> ");
+
+        if (node.getRight() != null) {
+            inOrderTraversal(node.getRight());
+        }
+    }
+
+    private void travers(final Node<T> node) {
+        if (node == null) return;
+
+        travers(node.getLeft());
+        travers(node.getRight());
+
+        System.out.println(node.getData());
 
     }
 
