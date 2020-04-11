@@ -10,6 +10,8 @@ public class App {
         binaryTree.insert(1);
         binaryTree.insert(3);
 
+
+
         BinaryTree<String> binaryTreeString = new BinaryTree<>();
         binaryTreeString.insert("Bob");
         binaryTreeString.insert("Josh");
@@ -17,13 +19,6 @@ public class App {
         binaryTreeString.insert("Frank");
         binaryTreeString.insert("Zeh");
 
-        BinaryTree<String> one = new BinaryTree<>();
-        one.insert("Fran");
-
-        one.traversal();
-
-        binaryTree.traversal();
-        binaryTreeString.traversal();
 
     }
 }

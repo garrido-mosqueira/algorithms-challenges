@@ -34,9 +34,4 @@ public class Node<T> {
     public void setRight(final Node<T> right) {
         this.right = right;
     }
-
-    @Override
-    public String toString() {
-        return this.data.toString();
-    }
 }
