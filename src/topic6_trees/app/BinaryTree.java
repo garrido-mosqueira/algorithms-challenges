@@ -60,6 +60,20 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
     }
 
     @Override
+    public String toString() {
+        return postTravers(root);
+    }
+
+    private String postTravers(final Node<T> node) {
+        if (node == null) return "";
+
+        String left = postTravers(node.getLeft());
+        String right = postTravers(node.getRight());
+
+        return left + " " + node.getData() + " " + right;
+    }
+
+    @Override
     public boolean search(final T data) {
         return false;
     }

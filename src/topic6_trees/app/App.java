@@ -25,6 +25,9 @@ public class App {
         binaryTreeString.traversal();
         System.out.println();
         one.traversal();
+        System.out.println();
+
+        System.out.println(binaryTree.toString());
 
     }
 }
