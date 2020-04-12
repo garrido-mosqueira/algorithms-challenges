@@ -132,8 +132,34 @@ public class SortedSquaredArray {
         }
     }
 
+    public static int[] sortedSquaredArray(int[] array) {
+        //This will be the linear solution since neither Merge or Quick sorting algorithms are O(N) - best O(LogN)
+        int[] aux = new int[array.length];
+        int i = 0;
+        int j = array.length - 1;
+        int k = j;
+
+        while (i <= j) {
+            int squaredLow = array[i] * array[i];
+            int squaredHigh = array[j] * array[j];
+
+            if (squaredHigh > squaredLow) {
+                aux[k--] = squaredHigh;
+                j--;
+            } else {
+                aux[k--] = squaredLow;
+                i++;
+            }
+        }
+        return aux;
+    }
+
     public static void main(String[] args) {
         int[] array = new int[]{-6, -4, 1, 2, 3, 5};
+
+        int[] result = sortedSquaredArray(array);
+        printArray(result);
+
         Solution solution = new Solution(array);
 
         int[] sortedSquaredQuickSort = solution.sortedSquaredQuickSort();
