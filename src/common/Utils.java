@@ -6,12 +6,14 @@ public final class Utils {
         for (int i = 0; i < array.length; i++) {
             System.out.print(array[i] + " ");
         }
+        System.out.println();
     }
 
     public static void printArrayRange(int[] array, int low, int high) {
         for (int i =low; i <= high; i++) {
             System.out.print(array[i] + " ");
         }
+        System.out.println();
     }
 
     public static String getString(int[] array) {

@@ -31,20 +31,36 @@ public class SortedSquaredArray {
 
     static class Solution {
         private final int[] array;
+        private final int[] temp;
+        private int[] quickArray;
+        private int[] mergeArray;
 
         Solution(int[] array) {
             this.array = array;
+            this.temp = new int[array.length];
+        }
+
+        public void printNotSorted() {
+            printArray(array);
         }
 
         public int[] sortedSquaredQuickSort() {
-            squareArray();
-            quickSort(0, array.length - 1);
-            return array;
+            quickArray = this.array.clone();
+            squareArray(quickArray);
+            quickSort(0, quickArray.length - 1);
+            return quickArray;
         }
 
-        private void squareArray() {
-            for (int i = 0; i < array.length; i++) {
-                array[i] = array[i] * array[i];
+        public int[] sortedSquaredMergeSort() {
+            mergeArray = this.array.clone();
+            squareArray(mergeArray);
+            mergeSort(0, mergeArray.length - 1);
+            return mergeArray;
+        }
+
+        private void squareArray(int[] arr) {
+            for (int i = 0; i < arr.length; i++) {
+                arr[i] = arr[i] * arr[i];
             }
         }
 
@@ -57,15 +73,49 @@ public class SortedSquaredArray {
             quickSort(pivot + 1, high);
         }
 
+        private void mergeSort(final int low, final int high) {
+            if (low >= high) return;
+
+            int middle = (high + low) / 2;
+            mergeSort(low, middle);
+            mergeSort(middle + 1, high);
+            merge(low, middle, high);
+        }
+
+        private void merge(final int low, final int middle, final int high) {
+            for (int i = low; i <= high; i++) {
+                temp[i] = mergeArray[i];
+            }
+
+            int i = low;
+            int j = middle + 1;
+            int k = low;
+
+            while (i <= middle && j <= high) {
+                if (temp[i] <= temp[j]) {
+                    mergeArray[k++] = temp[i++];
+                } else {
+                    mergeArray[k++] = temp[j++];
+                }
+            }
+
+            while (i <= middle) {
+                mergeArray[k++] = temp[i++];
+            }
+            while (j <= high) {
+                mergeArray[k++] = temp[j++];
+            }
+        }
+
         private int findPivot(final int low, final int high) {
             int pivot = (high + low) / 2;
-            int pivotValue = array[pivot];
+            int pivotValue = quickArray[pivot];
 
             swap(pivot, high);
 
             int j = low;
             for (int i = low; i < high; i++) {
-                if (array[i] <= pivotValue) {
+                if (quickArray[i] <= pivotValue) {
                     swap(i, j);
                     j++;
                 }
@@ -76,9 +126,9 @@ public class SortedSquaredArray {
         }
 
         public void swap(int i, int j) {
-            int aux = array[i];
-            array[i] = array[j];
-            array[j] = aux;
+            int aux = quickArray[i];
+            quickArray[i] = quickArray[j];
+            quickArray[j] = aux;
         }
     }
 
@@ -86,9 +136,13 @@ public class SortedSquaredArray {
         int[] array = new int[]{-6, -4, 1, 2, 3, 5};
         Solution solution = new Solution(array);
 
-        int[] sortSquared = solution.sortedSquaredQuickSort();
+        int[] sortedSquaredQuickSort = solution.sortedSquaredQuickSort();
+        printArray(sortedSquaredQuickSort);
+        solution.printNotSorted();
 
-        printArray(sortSquared);
+        int[] sortedSquaredMergeSort = solution.sortedSquaredMergeSort();
+        printArray(sortedSquaredMergeSort);
+        solution.printNotSorted();
     }
 
 }
