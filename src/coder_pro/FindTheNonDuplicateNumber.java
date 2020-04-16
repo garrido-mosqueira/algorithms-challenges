@@ -1,14 +1,12 @@
 package coder_pro;
 
-/**
- * Session 10
- * https://www.techseries.dev/products/coderpro/categories/1831147/posts/6178060
-
- **/
-
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Session 10
+ * https://www.techseries.dev/products/coderpro/categories/1831147/posts/6178060
+ */
 public class FindTheNonDuplicateNumber {
 
     static class Solution {
