@@ -81,11 +81,29 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 
     @Override
     public T getMax() {
-        return null;
+        if (root == null) return null;
+        return getMaxValue(root);
+    }
+
+    private T getMaxValue(final Node<T> right) {
+        if (right.getRight() == null) {
+            return right.getData();
+        } else {
+            return getMaxValue(right.getRight());
+        }
     }
 
     @Override
     public T getMin() {
-        return null;
+        if (root == null) return null;
+        return getMinValue(root);
+    }
+
+    private T getMinValue(final Node<T> left) {
+        if (left.getLeft() == null) {
+            return left.getData();
+        } else {
+            return getMinValue(left.getLeft());
+        }
     }
 }

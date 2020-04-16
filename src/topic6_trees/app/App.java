@@ -29,5 +29,10 @@ public class App {
 
         System.out.println(binaryTree.toString());
 
+        System.out.println(binaryTree.getMin());
+        System.out.println(binaryTree.getMax());
+        System.out.println(binaryTreeString.getMin());
+        System.out.println(binaryTreeString.getMax());
+
     }
 }
