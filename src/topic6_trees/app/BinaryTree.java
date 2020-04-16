@@ -76,7 +76,17 @@ public class BinaryTree<T extends Comparable<T>> implements Tree<T> {
 
     @Override
     public boolean search(final T data) {
-        return false;
+        if (root == null) return false;
+        int searchValue = searchValue(root, data);
+        return searchValue > 0;
+    }
+
+    private int searchValue(final Node<T> root, final T data) {
+        if (root == null) return 0;
+
+        if (root.getData().compareTo(data) == 0) return 1;
+
+        return searchValue(root.getLeft(), data) + searchValue(root.getRight(), data);
     }
 
     @Override

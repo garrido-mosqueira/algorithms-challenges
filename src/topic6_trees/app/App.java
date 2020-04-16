@@ -34,5 +34,8 @@ public class App {
         System.out.println(binaryTreeString.getMin());
         System.out.println(binaryTreeString.getMax());
 
+        System.out.println(binaryTree.search(4));
+        System.out.println(binaryTreeString.search("Hello"));
+
     }
 }
