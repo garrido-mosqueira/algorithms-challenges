@@ -1,5 +1,6 @@
 package challenge;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -67,6 +68,26 @@ public class TopKFrequentWord2 {
 
         assert solution.topKFrequent(Input, k).toString().equals(Arrays.toString(Output));
 
+        int[] nums = {1, 1, 1, 2, 2, 3};
+        k = 2;
+        Integer[] output = {1, 2};
+
+        List<Integer> integers = topKFrequent(nums, k);
+
+        assert integers.toString().equals(Arrays.toString(output));
+
+    }
+
+    public static List<Integer> topKFrequent(int[] nums, int k) {
+        Map<Integer, Long> map = Arrays.stream(nums)
+            .mapToObj(Integer::toString)
+            .collect(Collectors.groupingBy(Integer::parseInt, Collectors.counting()));
+
+        return map.entrySet().stream()
+            .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+            .map(Map.Entry::getKey)
+            .limit(k)
+            .collect(Collectors.toList());
     }
 
 }
