@@ -1,6 +1,5 @@
 package challenge;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -56,7 +55,6 @@ public class TopKFrequentWord2 {
         String[] Output = {"i", "love"};
         //Explanation: "i" and "love" are the two most frequent words.
         //Note that "i" comes before "love" due to a lower alphabetical order.
-
         assert solution.topKFrequent(Input, k).toString().equals(Arrays.toString(Output));
 
         //Example 2:
@@ -65,19 +63,25 @@ public class TopKFrequentWord2 {
         Output = new String[]{"the", "is", "sunny", "day"};
         //Explanation: "the", "is", "sunny" and "day" are the four most frequent words,
         //with the number of occurrence being 4, 3, 2 and 1 respectively.
-
         assert solution.topKFrequent(Input, k).toString().equals(Arrays.toString(Output));
 
+        //Example 3:
         int[] nums = {1, 1, 1, 2, 2, 3};
         k = 2;
         Integer[] output = {1, 2};
-
         List<Integer> integers = topKFrequent(nums, k);
-
         assert integers.toString().equals(Arrays.toString(output));
+
+        //Example 4:
+        nums = new int[]{3, 2, 3, 1, 2, 4, 5, 5, 6};
+        k = 4;
+        assert findKthLargest(nums, k) == 4;
 
     }
 
+    /**
+     * https://leetcode.com/problems/top-k-frequent-elements/
+     */
     public static List<Integer> topKFrequent(int[] nums, int k) {
         Map<Integer, Long> map = Arrays.stream(nums)
             .mapToObj(Integer::toString)
@@ -88,6 +92,19 @@ public class TopKFrequentWord2 {
             .map(Map.Entry::getKey)
             .limit(k)
             .collect(Collectors.toList());
+    }
+
+    /**
+     * https://leetcode.com/problems/kth-largest-element-in-an-array/
+     */
+    public static int findKthLargest(int[] nums, int k) {
+        List<Integer> collect = Arrays.stream(nums)
+            .mapToObj(Integer::new)
+            .sorted(Comparator.reverseOrder())
+            .limit(k)
+            .collect(Collectors.toList());
+
+        return collect.get(collect.size() - 1);
     }
 
 }
