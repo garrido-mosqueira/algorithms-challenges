@@ -32,14 +32,28 @@ public class FindLongestSubArrayBySum {
 
         for (int i = 0; i < arr.length; i++) {
             int sum = arr[i];
-            int j = i+1;
-            while (j < arr.length && sum < s) {
+            int j = i + 1;
+            while (j < arr.length && (sum < s || arr[j] == 0)) {
                 sum += arr[j];
                 j++;
             }
-            if (sum == s) return new int[]{i + 1, j + 1};
+            if (sum == s) return new int[]{i + 1, j};
         }
 
+        return new int[]{-1};
+    }
+
+    static int[] findLongestSubarrayBySum2(int s, int[] arr) {
+        int sum = 0;
+        int j = 0;
+        for (int i = 0; i < arr.length; i++) {
+            while (j < arr.length && (sum < s || arr[j] == 0)) {
+                sum += arr[j];
+                j++;
+            }
+            if (sum == s) return new int[]{i + 1, j};
+            sum -= arr[i];
+        }
         return new int[]{-1};
     }
 
@@ -47,7 +61,23 @@ public class FindLongestSubArrayBySum {
         int sum = 12;
         int[] arr = new int[]{1, 2, 3, 7, 5};
 
-        System.out.println(Arrays.toString(findLongestSubarrayBySum(sum, arr)));
+        System.out.println(Arrays.toString(findLongestSubarrayBySum(sum, arr)));//[2, 4]
+        System.out.println(Arrays.toString(findLongestSubarrayBySum2(sum, arr)));
+
+        sum = 15;
+        arr = new int[]{1, 2, 3, 4, 5, 0, 0, 0, 6, 7, 8, 9, 10};
+        System.out.println(Arrays.toString(findLongestSubarrayBySum(sum, arr)));//[1, 8]
+        System.out.println(Arrays.toString(findLongestSubarrayBySum2(sum, arr)));
+
+        sum = 20;
+        arr = new int[]{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 9, 10};
+        System.out.println(Arrays.toString(findLongestSubarrayBySum(sum, arr)));//[2, 13]
+        System.out.println(Arrays.toString(findLongestSubarrayBySum2(sum, arr)));
+
+        sum = 20;
+        arr = new int[]{5, 5, 5, 6, 5, 5, 5, 6, 6, 5, 1, 9, 10};
+        System.out.println(Arrays.toString(findLongestSubarrayBySum(sum, arr)));//[11, 13]
+        System.out.println(Arrays.toString(findLongestSubarrayBySum2(sum, arr)));
 
     }
 
