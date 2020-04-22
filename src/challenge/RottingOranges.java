@@ -62,7 +62,6 @@ public class RottingOranges {
         minutes = orangesRotting(orange5);
         System.out.println(minutes);//0
 
-
     }
 
     public static int orangesRotting(int[][] grid) {
