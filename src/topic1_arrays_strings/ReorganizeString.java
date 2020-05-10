@@ -1,4 +1,4 @@
-package challenge;
+package topic1_arrays_strings;
 
 import java.util.Comparator;
 import java.util.HashMap;

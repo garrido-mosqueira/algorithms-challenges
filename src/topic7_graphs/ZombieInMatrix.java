@@ -1,4 +1,4 @@
-package challenge;
+package topic7_graphs;
 
 import java.util.Arrays;
 import java.util.List;
