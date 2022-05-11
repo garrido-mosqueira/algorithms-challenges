@@ -29,10 +29,9 @@ public class MergeOverlappingIntervals {
 
     public static void main(String[] args) {
 
-//		int[][] matrix =new int[][]{{1, 2},{3, 5},{4, 7},{6, 8},{9, 10}};   //worked
+		int[][] matrix =new int[][]{{1, 2},{3, 5},{4, 7},{6, 8},{9, 10}};   //worked
 //        int[][] matrix = new int[][]{{100, 105}, {1, 104}};               //worked
-        int[][] matrix = new int[][]{{2, 3}, {4, 5}, {6, 7}, {8, 9}, {1, 10}};  
-
+//        int[][] matrix = new int[][]{{2, 3}, {4, 5}, {6, 7}, {8, 9}, {1, 10}};
 
         int[][] ints = mergeOverlappingIntervals(matrix);
 
@@ -41,6 +40,37 @@ public class MergeOverlappingIntervals {
     }
 
     public static int[][] mergeOverlappingIntervals(int[][] intervals) {
+        List<int[]> result = new ArrayList<>();
+        int size = intervals.length;
+        int i = 0, j = 0;
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+
+        while (i < size) {
+            int low = intervals[i][0];
+            int high = intervals[i][1];
+            j = i+1;
+            while (j < size) {
+                int currentLow = intervals[j][0];
+                if (currentLow <= high) {
+                    if (high < intervals[j][1]) {
+                        high = intervals[j][1];
+                    }
+                    j++;
+                } else {
+                    result.add(new int[]{low, high});
+                    break;
+                }
+            }
+            i = j;
+            if (i == size) {
+                result.add(new int[]{low, high});
+                return result.toArray(new int[0][0]);
+            }
+        }
+        return result.toArray(new int[0][0]);
+    }
+
+    public static int[][] mergeOverlappingIntervalsNotOptimal(int[][] intervals) {
         List<int[]> result = new ArrayList<>();
         int size = intervals.length;
         int i = 0;
