@@ -52,9 +52,7 @@ public class MergeOverlappingIntervals {
             while (j < size) {
                 int currentLow = intervals[j][0];
                 if (currentLow <= high) {
-                    if (high < intervals[j][1]) {
-                        high = intervals[j][1];
-                    }
+                    high = Math.max(high, intervals[j][1]);
                     j++;
                 } else {
                     result.add(new int[]{low, high});
