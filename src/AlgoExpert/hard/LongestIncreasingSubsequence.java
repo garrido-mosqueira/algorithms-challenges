@@ -22,26 +22,59 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class LongestIncreasingSubsequence {
 
     public static void main(String[] args) {
-//        int[] arrayInput = new int[]{5, 7, -24, 12, 10, 2, 3, 12, 5, 6, 35};
-//        List<Integer> output = List.of(-24, 2, 3, 5, 6, 35);
+        int[] arrayInput1 = new int[]{5, 7, -24, 12, 10, 2, 3, 12, 5, 6, 35};
+        List<Integer> output1 = List.of(-24, 2, 3, 5, 6, 35);
 
-        int[] arrayInput = new int[]{10, 22, 9, 33, 21, 61, 41, 60, 80};
-        List<Integer> output = List.of(10, 22, 33, 41, 60, 80);
+        int[] arrayInput2 = new int[]{10, 22, 9, 33, 21, 61, 41, 60, 80};
+        List<Integer> output2 = List.of(10, 22, 33, 41, 60, 80);
 
-        List<Integer> integers = longestIncreasingSubsequence(arrayInput);
-
-        System.out.println(integers);
-
-        boolean containsAll = new HashSet<>(integers).containsAll(output);
-
-        System.out.println(containsAll);
+        testing(arrayInput1, output1);
+        testing(arrayInput2, output2);
 
     }
 
+    private static void testing(int[] arrayInput, List<Integer> output) {
+        List<Integer> integers = longestIncreasingSubsequence(arrayInput);
+        System.out.println(integers);
+        boolean containsAll = new HashSet<>(integers).containsAll(output);
+        System.out.println(containsAll);
+    }
+
     public static List<Integer> longestIncreasingSubsequence(int[] array) {
+        List<Integer> sequence = new ArrayList<>();
+        sequence.add(0, array[0]);
+        for (int i = 1; i < array.length; i++) {
+            int index = binaryMinimumSearch(sequence, array[i]);
+            if (index != Integer.MIN_VALUE) {
+                sequence.set(index, array[i]);
+            } else {
+                sequence.add(array[i]);
+            }
+        }
+        return sequence.stream().sorted().collect(Collectors.toList());
+    }
+
+    private static int binaryMinimumSearch(List<Integer> sequence, int num) {
+        int left = 0;
+        int right = sequence.size()-1;
+        int indexMin = Integer.MAX_VALUE;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (sequence.get(mid) >= num) {
+                indexMin = Math.min(indexMin, mid);
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return indexMin != Integer.MAX_VALUE ? indexMin : Integer.MIN_VALUE;
+    }
+
+    public static List<Integer> longestIncreasingSubsequenceOrderN2(int[] array) {
         int[] length = new int[array.length];
         int[] sequence = new int[array.length];
 
