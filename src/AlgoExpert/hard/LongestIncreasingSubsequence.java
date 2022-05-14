@@ -31,7 +31,6 @@ public class LongestIncreasingSubsequence {
         int[] arrayInput = new int[]{10, 22, 9, 33, 21, 61, 41, 60, 80};
         List<Integer> output = List.of(10, 22, 33, 41, 60, 80);
 
-
         List<Integer> integers = longestIncreasingSubsequence(arrayInput);
 
         System.out.println(integers);
@@ -51,9 +50,9 @@ public class LongestIncreasingSubsequence {
         int maxIndex = 0;
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < i; j++) {
-                if (array[i] > array[j]) {
+                if (array[i] > array[j] && length[j] + 1 > length[i]) {
                     sequence[i] = j;
-                    length[i] = Math.max(length[i], 1 + length[j]);
+                    length[i] = 1 + length[j];
                 }
                 maxIndex = length[i] > length[maxIndex] ? i : maxIndex;
             }
