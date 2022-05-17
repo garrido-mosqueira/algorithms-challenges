@@ -10,9 +10,20 @@ public final class Utils {
     }
 
     public static void printArrayRange(int[] array, int low, int high) {
+        System.out.print("[ ");
         for (int i =low; i <= high; i++) {
             System.out.print(array[i] + " ");
         }
+        System.out.print(" ]");
+        System.out.println();
+    }
+
+    public static void printArrayRange(char[] array, int low, int high) {
+        System.out.print("[ ");
+        for (int i =low; i <= high; i++) {
+            System.out.print(array[i] + " ");
+        }
+        System.out.print(" ]");
         System.out.println();
     }
 
