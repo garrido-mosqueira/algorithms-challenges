@@ -23,7 +23,7 @@ public final class Utils {
         for (int i =low; i <= high; i++) {
             System.out.print(array[i] + " ");
         }
-        System.out.print(" ]");
+        System.out.print("]");
         System.out.println();
     }
 
