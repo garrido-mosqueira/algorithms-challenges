@@ -1,4 +1,4 @@
-package AlgoExpert.hard;
+package AlgoExpert.medium;
 
 /*
 Longest Palindromic Substring:
