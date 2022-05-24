@@ -78,9 +78,9 @@ public class AsteroidsChallenge {
             new Asteroid(10, -1)
         };
 
-        assert asteroidCollision(asteroids1) == 0;
-        assert asteroidCollision(asteroids2) == 1;
-        assert asteroidCollision(asteroids3) == 0;
+        System.out.println(asteroidCollision(asteroids1) == 0);
+        System.out.println(asteroidCollision(asteroids2) == 1);
+        System.out.println(asteroidCollision(asteroids3) == 0);
 
     }
 }
