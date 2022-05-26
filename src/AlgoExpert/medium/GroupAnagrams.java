@@ -37,19 +37,28 @@ public class GroupAnagrams {
         List<List<String>> lists3 = groupAnagrams(input3);
         System.out.println(lists3);
 
+        List<String> input4 = Arrays.asList("eat","tea","tan","ate","nat","bat");
+        List<List<String>> output4 = List.of(List.of("bat"), List.of("nat","tan"), List.of("ate","eat","tea"));
+        List<List<String>> lists4 = groupAnagrams(input4);
+        System.out.println(lists4);
+
+        List<String> input5 = Arrays.asList("","");
+        List<List<String>> output5 = List.of(List.of("",""));
+        List<List<String>> lists5 = groupAnagrams(input5);
+        System.out.println(lists5);
+
     }
 
     public static List<List<String>> groupAnagrams(List<String> words) {
-        Set<String> origin = ConcurrentHashMap.newKeySet();
-        origin.addAll(words);
+        Set<String> processed = new HashSet<>();
         List<List<String>> result = new ArrayList<>();
-        for (String word : origin) {
-            if (origin.size() > 0) {
+        for (String word : words) {
+            if (!processed.contains(word)) {
                 List<String> anagrams = new ArrayList<>();
-                addAndRemoveFromOrigin(anagrams, origin, word);
-                for (String wordCompare : origin) {
-                    if (isAnagram(word, wordCompare)) {
-                        addAndRemoveFromOrigin(anagrams, origin, wordCompare);
+                addAndRemoveFromOrigin(anagrams, processed, word);
+                for (String wordCompare : words) {
+                    if (!word.equals(wordCompare) && isAnagram(word, wordCompare)) {
+                        addAndRemoveFromOrigin(anagrams, processed, wordCompare);
                     }
                 }
                 result.add(anagrams);
@@ -58,9 +67,9 @@ public class GroupAnagrams {
         return result;
     }
 
-    private static void addAndRemoveFromOrigin(List<String> anagrams, Set<String> unique, String word) {
+    private static void addAndRemoveFromOrigin(List<String> anagrams, Set<String> processed, String word) {
+        processed.add(word);
         anagrams.add(word);
-        unique.remove(word);
     }
 
     private static boolean isAnagram(String s, String s1) {
