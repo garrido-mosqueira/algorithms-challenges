@@ -58,42 +58,24 @@ public class TotalPriceBundleCinema {
                 }
             }
         }
+        return getResult(popcorn, soda);
+    }
 
-        double bundle = 0;
-        double unique = 0;
-
-        if (popcorn > soda) {
-            bundle = soda * 9;
-            unique = (popcorn - soda) * 8;
-        } else if (popcorn < soda) {
-            bundle = popcorn * 9;
-            unique = (soda - popcorn) * 2.5;
-        } else {
-            bundle = ((popcorn + soda) / 2) * 9;
-        }
-
-        return bundle + unique;
+    private static double getResult(int popcorn, int soda) {
+        double result = 0;
+        int itemDiscount = Math.min(popcorn, soda);
+        result = itemDiscount * 9;
+        result += (soda -itemDiscount) * 2.5;
+        result += (popcorn - itemDiscount) * 8;
+        return result;
     }
 
     public static double totalPrice(Map<String, Map<String, Integer>> inventory, String date) {
         Map<String, Integer> itemsCount = inventory.get(date);
-        double bundle = 0;
-        double unique = 0;
-
         int popcorn = itemsCount.getOrDefault("popcorn", 0);
         int soda = itemsCount.getOrDefault("soda", 0);
 
-        if (popcorn == soda) {
-            bundle = ((popcorn + soda) / 2) * 9;
-        } else if (popcorn > soda) {
-            bundle = soda * 9;
-            unique = (popcorn - soda) * 8;
-        } else if (popcorn < soda) {
-            bundle = popcorn * 9;
-            unique = (soda - popcorn) * 2.5;
-        }
-
-        return bundle + unique;
+        return getResult(popcorn, soda);
     }
 
     public static Map<String, Map<String, Integer>> datesInventory(String[][] datesItem) {
