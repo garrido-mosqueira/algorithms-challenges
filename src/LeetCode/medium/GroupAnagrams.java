@@ -50,41 +50,7 @@ public class GroupAnagrams {
                 groupAnagrams.put(sorted, new ArrayList<>(Arrays.asList(word)));
             }
         }
-
         return new ArrayList<>(groupAnagrams.values());
-    }
-
-
-    private static boolean isAnagram(String s, String s1) {
-        if (s.length() != s1.length()) return false;
-        int[] ascii = new int[256];
-
-        for (int i = 0; i < s.length(); i++) {
-            ascii[s.charAt(i)]++;
-            ascii[s1.charAt(i)]--;
-        }
-
-        for (int i = 0; i < ascii.length; i++) {
-            if (ascii[i] != 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static boolean isAnagram1(String s, String s1) {
-        Map<Character, Integer> charCountMap = new HashMap<>();
-
-        for (char letter : s.toCharArray()) {
-            charCountMap.put(letter, charCountMap.getOrDefault(letter, 0) + 1);
-        }
-
-        for (char letter : s1.toCharArray()) {
-            charCountMap.computeIfPresent(letter, (key, value) -> --value);
-        }
-
-        return charCountMap.values().stream().allMatch(value -> value == 0);
-
     }
 
 }
