@@ -47,17 +47,24 @@ public class GroupAnagrams {
         List<List<String>> lists5 = groupAnagrams(input5);
         System.out.println(lists5);
 
+        List<String> input6 = Arrays.asList("","b");
+        List<List<String>> output6 = List.of(List.of(""), List.of("b"));
+        List<List<String>> lists6 = groupAnagrams(input6);
+        System.out.println(lists6);
+
     }
 
     public static List<List<String>> groupAnagrams(List<String> words) {
         Set<String> processed = new HashSet<>();
+        List<String> wordsCopy = new ArrayList<>(words);
         List<List<String>> result = new ArrayList<>();
         for (String word : words) {
             if (!processed.contains(word)) {
                 List<String> anagrams = new ArrayList<>();
                 addAndRemoveFromOrigin(anagrams, processed, word);
-                for (String wordCompare : words) {
-                    if (!word.equals(wordCompare) && isAnagram(word, wordCompare)) {
+                wordsCopy.remove(word);
+                for (String wordCompare : wordsCopy) {
+                    if (isAnagram(word, wordCompare)) {
                         addAndRemoveFromOrigin(anagrams, processed, wordCompare);
                     }
                 }
