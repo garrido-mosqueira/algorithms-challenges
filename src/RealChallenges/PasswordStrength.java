@@ -1,3 +1,5 @@
+package RealChallenges;
+
 /*
 https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/
 Q2 : Given a password string, calculate its strength, where strength is equals to the sum of count of distinct characters in all the substrings of that string.

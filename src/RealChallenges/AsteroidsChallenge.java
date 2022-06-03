@@ -1,3 +1,5 @@
+package RealChallenges;
+
 import java.util.Stack;
 
 public class AsteroidsChallenge {

@@ -1,4 +1,4 @@
-
+package RealChallenges;
 /*
 1. Code Question 1
 A Store Shopping recently launched a new item whose daily customer ratings for n days is represented by the array ratings.
