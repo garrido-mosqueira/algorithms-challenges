@@ -74,13 +74,44 @@ The groups [4], [2], [3], [1] are the only groups that qualify.
 public class CountDecreasingRatings {
 
     public static void main(String[] args) {
+        int[] input = {4, 3, 5, 4, 3};
+        int[] input1 = {2, 1, 3};
+        int[] input2 = {4, 2, 3, 1};
+
+        System.out.println(countDecreasingRatings(input) + " should be 9");
+        System.out.println(countDecreasingRatings(input1) + " should be 4");
+        System.out.println(countDecreasingRatings(input2) + " should be 4");
+        System.out.println(" ");
 
     }
 
 
     public static long countDecreasingRatings(int[] ratings) {
+        long count = 0;
+        int left = 0;
+        int right = left + 1;
 
-        return 1L;
+        while (left < ratings.length) {
+            if (right == ratings.length) {
+                right = ratings.length - 1;
+                left++;
+            }
+            if (ratings[left] - ratings[right] > 0) {
+                int innerLeft = left;
+                int innerRight = left + 1;
+                while (innerRight < ratings.length && ratings[innerLeft] == ratings[innerRight] + 1) {
+                    count++;
+                    System.out.println("Count: " + count + " [ " + ratings[left] + ", " + ratings[innerRight] + " ]");
+                    innerRight++;
+                    innerLeft++;
+                }
+            } else {
+                left++;
+            }
+            right++;
+        }
+
+        return count + ratings.length;
     }
 
 }
