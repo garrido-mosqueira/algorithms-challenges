@@ -87,12 +87,25 @@ public class MaxSubarrayLength {
 
     }
 
-//    public static int maxSubarrayLength(List<Integer> badges) {
-//
-//
-//    }
-
     public static int maxSubarrayLength(List<Integer> badges) {
+        int positive = 0;
+        int negative = 0;
+        int result = 0;
+        for (Integer badge : badges) {
+            if (badge > 0) {
+                positive++;
+                negative = negative > 0 ? ++negative : 0;
+            } else {
+                int aux = positive;
+                positive = negative > 0 ? ++negative : 0;
+                negative = aux + 1;
+            }
+            result = Math.max(result, positive);
+        }
+        return result;
+    }
+
+    public static int maxSubarrayLength_good(List<Integer> badges) {
         int maxSubarrayLength = 0;
         int negativeCount = 0;
         int firstNegativeIndex = -1;
