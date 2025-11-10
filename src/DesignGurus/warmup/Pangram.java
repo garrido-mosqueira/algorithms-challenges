@@ -20,5 +20,9 @@ public class Pangram {
         return true;
     }
 
+    static void main(String[] args) {
+        Pangram pangram = new Pangram();
+        System.out.println(pangram.checkIfPangram("The quick brown fox jumps over the lazy dog"));
+    }
 
 }
