@@ -6,12 +6,12 @@ public class ValidAnagram {
      * Returns true if strings s and t are anagrams under the constraints:
      * - 1 <= s.length, t.length <= 5e5
      * - s and t consist of lowercase English letters 'a'..'z'
-     *
+
      * Implementation details:
      * - Time: O(n)
      * - Space: O(1) using a fixed-size frequency array of 26 entries
      * - Early exit: while decrementing counts for t, if any bucket goes negative,
-     *   t contains a letter more times than s → not an anagram.
+         t contains a letter more times than s → not an anagram.
      * - Avoids creating intermediate char arrays to keep memory usage low for large inputs.
      */
     public boolean isAnagram(String s, String t) {
@@ -20,18 +20,15 @@ public class ValidAnagram {
 
         int[] freq = new int[26];
 
-        // Count letters from s
         for (int i = 0, n = s.length(); i < n; i++) {
             freq[s.charAt(i) - 'a']++;
+            freq[t.charAt(i) - 'a']--;
         }
 
-        // Subtract letters from t with early exit
-        for (int i = 0, n = t.length(); i < n; i++) {
-            int idx = t.charAt(i) - 'a';
-            if (--freq[idx] < 0) return false;
+        for (int i = 0; i < freq.length; i++) {
+            if (freq[i] != 0) return false;
         }
 
-        // All buckets must be zero now
         return true;
     }
 
