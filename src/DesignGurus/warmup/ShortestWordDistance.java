@@ -3,11 +3,20 @@ package DesignGurus.warmup;
 public class ShortestWordDistance {
 
     public int shortestDistance(String[] words, String word1, String word2) {
+        int shortestDistance = words.length;
+        int position1 = -1, position2 = -1;
 
-
-
-
-        return 1;
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].equals(word1)) {
+                position1 = i;
+            } else if (words[i].equals(word2)) {
+                position2 = i;
+            }
+            if (position1 != -1 && position2 != -1) {
+                shortestDistance = Math.min(shortestDistance, Math.abs(position1 - position2));
+            }
+        }
+        return shortestDistance;
     }
 
     static void main(String[] args) {
