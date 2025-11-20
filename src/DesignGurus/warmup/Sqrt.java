@@ -8,9 +8,10 @@ public class Sqrt {
 
         while (start <= end) {
             int mid = start + (end - start) / 2;
-            if (mid == x / mid) {
+            int numberDivided = x / mid;
+            if (mid == numberDivided) {
                 return mid;
-            } else if (mid < x / mid) {
+            } else if (mid < numberDivided) {
                 start = mid + 1;
             } else {
                 end = mid - 1;
