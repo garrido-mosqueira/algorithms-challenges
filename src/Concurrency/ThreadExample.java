@@ -4,8 +4,8 @@ public class ThreadExample {
 
     static void main() {
         Runnable runnable = () -> {
-            System.out.println("Lambda running");
-            System.out.println("Lambda finished");
+            String threadName = Thread.currentThread().getName();
+            System.out.println(threadName + " Running");
         };
 
         Thread thread = new Thread(runnable);
