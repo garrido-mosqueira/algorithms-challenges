@@ -8,8 +8,11 @@ public class ThreadExample {
             System.out.println(threadName + " Running");
         };
 
-        Thread thread = new Thread(runnable, "thread name");
+        Thread thread = new Thread(runnable, "thread name 1");
         thread.start();
+
+        Thread thread2 = new Thread(runnable, "thread name 2");
+        thread2.start();
     }
 
 }
