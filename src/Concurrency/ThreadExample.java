@@ -3,15 +3,13 @@ package Concurrency;
 public class ThreadExample {
 
     static void main() {
-        Runnable runnable = () -> {
-            String threadName = Thread.currentThread().getName();
-            System.out.println(threadName + " Running");
-        };
+        Runnable runnable1 = new MyRunnable();
+        Runnable runnable2 = new MyRunnable();
 
-        Thread thread = new Thread(runnable, "thread name 1");
-        thread.start();
+        Thread thread1 = new Thread(runnable1, "thread 1");
+        Thread thread2 = new Thread(runnable2, "thread 2");
 
-        Thread thread2 = new Thread(runnable, "thread name 2");
+        thread1.start();
         thread2.start();
     }
 
