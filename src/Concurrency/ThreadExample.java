@@ -7,7 +7,7 @@ public class ThreadExample {
         Runnable runnable2 = new MyRunnable();
 
         Thread thread1 = new Thread(runnable1, "thread 1");
-        Thread thread2 = new Thread(runnable2, "thread 2");
+        Thread thread2 = new Thread(runnable1, "thread 2");
 
         thread1.start();
         thread2.start();
