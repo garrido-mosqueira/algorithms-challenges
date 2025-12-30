@@ -4,10 +4,10 @@ public class MyCounter {
 
     private long counter = 0;
 
-    public void increment(){
+    public synchronized void increment(){
         counter++;
     }
-    public long getCounter(){
+    public synchronized long getCounter(){
         return counter;
     }
 
