@@ -16,14 +16,16 @@ public class RaceConditions {
     private static Runnable getRunnable(Map<String, String> sharedMap) {
         return () -> {
             for (int i = 0; i < 1_000_000; i++) {
-                if (sharedMap.containsKey("key")) {
-                    String val = sharedMap.remove("key");
-                    if (val == null) {
-                        System.out.println(
-                                "Iteration: " + i + ": Value for 'key' was null");
+                synchronized (sharedMap) {
+                    if (sharedMap.containsKey("key")) {
+                        String val = sharedMap.remove("key");
+                        if (val == null) {
+                            System.out.println(
+                                    "Iteration: " + i + ": Value for 'key' was null");
+                        }
+                    } else {
+                        sharedMap.put("key", "value");
                     }
-                } else {
-                    sharedMap.put("key", "value");
                 }
             }
         };
