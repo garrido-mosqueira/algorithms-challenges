@@ -13,7 +13,7 @@ import Concurrency.locking.readwrite.StampedLockCounter;
  */
 public class ConcurrencyMechanismsRunner {
 
-    public static void main(String[] args) throws InterruptedException {
+    static void main(String[] args) throws InterruptedException {
         System.out.println("=== AtomicCounter ===");
         AtomicCounter.main(new String[0]);
 

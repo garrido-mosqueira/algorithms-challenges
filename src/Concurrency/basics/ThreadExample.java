@@ -16,7 +16,7 @@ public class ThreadExample {
 //    }
 
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         MyCounter counter = new MyCounter();
 
         Thread thread1 = new Thread(() -> {

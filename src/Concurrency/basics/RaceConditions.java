@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RaceConditions {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         Map<String, String> sharedMap = new ConcurrentHashMap<>();
         Thread thread1 = new Thread(getRunnable(sharedMap));
         Thread thread2 = new Thread(getRunnable(sharedMap));
