@@ -1,4 +1,6 @@
-package Concurrency;
+package Concurrency.basics;
+
+import Concurrency.locking.mutex.MyCounter;
 
 public class ThreadExample {
 
@@ -14,7 +16,7 @@ public class ThreadExample {
 //    }
 
 
-    static void main() {
+    public static void main(String[] args) {
         MyCounter counter = new MyCounter();
 
         Thread thread1 = new Thread(() -> {
@@ -36,3 +38,4 @@ public class ThreadExample {
     }
 
 }
+

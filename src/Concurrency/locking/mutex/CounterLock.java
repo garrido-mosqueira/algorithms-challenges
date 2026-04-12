@@ -1,4 +1,4 @@
-package Concurrency;
+package Concurrency.locking.mutex;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -27,3 +27,4 @@ public class CounterLock {
     }
 
 }
+

@@ -1,4 +1,4 @@
-package Concurrency;
+package Concurrency.locking.mutex;
 
 public class MyCounter {
 
@@ -13,3 +13,4 @@ public class MyCounter {
     }
 
 }
+

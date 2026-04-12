@@ -1,11 +1,11 @@
-package Concurrency;
+package Concurrency.basics;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RaceConditions {
 
-    static void main() {
+    public static void main(String[] args) {
         Map<String, String> sharedMap = new ConcurrentHashMap<>();
         Thread thread1 = new Thread(getRunnable(sharedMap));
         Thread thread2 = new Thread(getRunnable(sharedMap));
@@ -32,3 +32,4 @@ public class RaceConditions {
     }
 
 }
+

@@ -1,4 +1,4 @@
-package Concurrency;
+package Concurrency.basics;
 
 public class MyRunnable implements Runnable {
 
@@ -17,3 +17,4 @@ public class MyRunnable implements Runnable {
                         + ": " + this.count);
     }
 }
+
