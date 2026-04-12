@@ -1,40 +1,18 @@
 package Concurrency.basics;
 
-import Concurrency.locking.mutex.MyCounter;
-
 public class ThreadExample {
 
-//    static void main() {
-//        Runnable runnable1 = new MyRunnable();
-//        Runnable runnable2 = new MyRunnable();
-//
-//        Thread thread1 = new Thread(runnable1, "thread 1");
-//        Thread thread2 = new Thread(runnable1, "thread 2");
-//
-//        thread1.start();
-//        thread2.start();
-//    }
+    public static void main(String[] args) throws InterruptedException {
+        Runnable runnable = new MyRunnable();
 
-
-    static void main(String[] args) {
-        MyCounter counter = new MyCounter();
-
-        Thread thread1 = new Thread(() -> {
-            for (int i = 0; i < 1_000_000; i++) {
-                counter.increment();
-            }
-            System.out.println(counter.getCounter());
-        });
-
-        Thread thread2 = new Thread(() -> {
-            for (int i = 0; i < 1_000_000; i++) {
-                counter.increment();
-            }
-            System.out.println(counter.getCounter());
-        });
+        Thread thread1 = new Thread(runnable, "thread 1");
+        Thread thread2 = new Thread(runnable, "thread 2");
 
         thread1.start();
         thread2.start();
+
+        thread1.join();
+        thread2.join();
     }
 
 }
