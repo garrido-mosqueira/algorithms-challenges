@@ -1,13 +1,12 @@
-# Java Concurrency Deep-Dive Reference
+# Java Concurrency Deep-Dive Reference 🧵
 
 This is the **main reference** for the concurrency examples in `src/Concurrency`.
 
 If you want one place to learn from this folder, read this file.
-The other markdown files in `docs/` now simply point here.
 
 ---
 
-## 1. What this folder is trying to teach
+## 1. What this folder is trying to teach 🎯
 
 This concurrency section is organized around a simple idea:
 
@@ -28,7 +27,7 @@ It is mostly about understanding these questions:
 
 ---
 
-## 2. Package map
+## 2. Package map 🗺️
 
 ```text
 Concurrency/
@@ -53,15 +52,14 @@ Concurrency/
 │   └── SemaphoreCounter.java
 ├── runner/
 │   └── ConcurrencyMechanismsRunner.java
-└── docs/
-    └── README.md
+└── README.md
 ```
 
 ---
 
-## 3. Big-picture mental model
+## 3. Big-picture mental model 🧠
 
-### Concurrency vs parallelism
+### Concurrency vs parallelism ⚙️
 
 These words are related, but not identical.
 
@@ -74,7 +72,7 @@ Java concurrency tools are useful in both cases, but the core learning in this f
 - how to prevent race conditions
 - how to coordinate multiple threads
 
-### The main problems in concurrent code
+### The main problems in concurrent code 🚨
 
 #### A. Race conditions
 A race condition happens when the result depends on timing between threads.
@@ -108,7 +106,7 @@ That is where barriers, latches, and semaphores become more useful than plain mu
 
 ---
 
-## 4. How the packages are organized
+## 4. How the packages are organized 📦
 
 The code is grouped by **concept**, not just by who uses whom.
 
@@ -153,9 +151,9 @@ Use this package when you want to run several demos in one command.
 
 ---
 
-## 5. Class-by-class reference
+## 5. Class-by-class reference 📚
 
-## `Concurrency.basics`
+## `Concurrency.basics` 🌱
 
 ### `ThreadExample`
 **Purpose:** demonstrate basic thread creation with a shared `Runnable` instance.
@@ -210,7 +208,7 @@ java -cp src Concurrency.basics.RaceConditions
 
 ---
 
-## `Concurrency.locking.mutex`
+## `Concurrency.locking.mutex` 🔒
 
 ### `MyCounter`
 **Purpose:** simplest synchronized counter.
@@ -301,7 +299,7 @@ Trade-off:
 
 ---
 
-## `Concurrency.locking.lockfree`
+## `Concurrency.locking.lockfree` ⚡
 
 ### `AtomicCounter`
 **Purpose:** lock-free counter based on `AtomicLong`.
@@ -331,7 +329,7 @@ java -cp src Concurrency.locking.lockfree.AtomicCounter
 
 ---
 
-## `Concurrency.locking.readwrite`
+## `Concurrency.locking.readwrite` 📖✍️
 
 ### `ReentrantReadWriteLockCounter`
 **Purpose:** allow many readers but only one writer.
@@ -388,7 +386,7 @@ java -cp src Concurrency.locking.readwrite.StampedLockCounter
 
 ---
 
-## `Concurrency.coordination`
+## `Concurrency.coordination` 🤝
 
 ### `SemaphoreCounter`
 **Purpose:** limit how many threads can access a section at the same time.
@@ -461,7 +459,7 @@ java -cp src Concurrency.coordination.CountDownLatchExample
 
 ---
 
-## `Concurrency.runner`
+## `Concurrency.runner` ▶️
 
 ### `ConcurrencyMechanismsRunner`
 **Purpose:** run the main concurrency demos in one sequence.
@@ -479,7 +477,7 @@ java -cp src Concurrency.runner.ConcurrencyMechanismsRunner
 
 ---
 
-## 6. Mechanism comparison
+## 6. Mechanism comparison 📊
 
 | Mechanism | Main idea | Best workload | Strength | Weakness |
 |---|---|---|---|---|
@@ -495,7 +493,7 @@ java -cp src Concurrency.runner.ConcurrencyMechanismsRunner
 
 ---
 
-## 7. Which one should you choose?
+## 7. Which one should you choose? 🧭
 
 ### Choose `AtomicCounter` when
 
@@ -540,7 +538,7 @@ java -cp src Concurrency.runner.ConcurrencyMechanismsRunner
 
 ---
 
-## 8. Recommended learning order
+## 8. Recommended learning order 🛤️
 
 ### Stage 1 — thread basics
 
@@ -588,7 +586,7 @@ Goal:
 
 ---
 
-## 9. Compile and run
+## 9. Compile and run 🧪
 
 ### Compile everything
 
@@ -620,7 +618,7 @@ java -cp src Concurrency.coordination.PhasedBankTransfer
 
 ---
 
-## 10. Deep-dive questions to ask yourself while reading the code
+## 10. Deep-dive questions to ask yourself while reading the code 🔍
 
 ### For mutex examples
 
@@ -645,7 +643,7 @@ java -cp src Concurrency.coordination.PhasedBankTransfer
 
 ---
 
-## 11. Important limitation of this folder
+## 11. Important limitation of this folder ⚠️
 
 This folder gives you a strong practical introduction, but it does **not** yet cover all of Java concurrency.
 
@@ -672,7 +670,7 @@ So think of this folder as a **solid foundation**, especially around:
 
 ---
 
-## 12. Final advice
+## 12. Final advice 💡
 
 Do not try to memorize every API first.
 
@@ -687,7 +685,7 @@ If you keep asking those questions, Java concurrency will start feeling much mor
 
 ---
 
-## 13. Canonical docs note
+## 13. Canonical docs note 🧾
 
 - This file is the canonical reference for the concurrency folder.
 - The other markdown files in `docs/` are now lightweight pointers here so you only need one reading path.
