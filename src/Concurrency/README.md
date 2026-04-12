@@ -688,4 +688,3 @@ If you keep asking those questions, Java concurrency will start feeling much mor
 ## 13. Canonical docs note 🧾
 
 - This file is the canonical reference for the concurrency folder.
-- The other markdown files in `docs/` are now lightweight pointers here so you only need one reading path.
