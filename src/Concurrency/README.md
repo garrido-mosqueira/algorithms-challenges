@@ -147,9 +147,6 @@ Use this package to learn:
 - waiting for phases to complete
 - making multiple threads move through a workflow together
 
-### `Concurrency.runner`
-Use this package when you want to run several demos in one command.
-
 ---
 
 ## 5. Class-by-class reference 📚
