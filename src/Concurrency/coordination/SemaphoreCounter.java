@@ -60,7 +60,7 @@ public class SemaphoreCounter {
     /**
      * Main demonstrates semaphore with limited concurrent access
      */
-    public static void main(String[] args) throws InterruptedException {
+    static void main() throws InterruptedException {
         int maxConcurrentAccess = 3;
         SemaphoreCounter counter = new SemaphoreCounter(maxConcurrentAccess);
         int numThreads = 10;

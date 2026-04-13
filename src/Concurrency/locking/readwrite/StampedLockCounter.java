@@ -63,7 +63,7 @@ public class StampedLockCounter {
     /**
      * Main demonstrates StampedLock performance benefits
      */
-    public static void main(String[] args) throws InterruptedException {
+    static void main() throws InterruptedException {
         StampedLockCounter counter = new StampedLockCounter();
         int numReaderThreads = 10;
         int numWriterThreads = 1;

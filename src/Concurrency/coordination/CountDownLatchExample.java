@@ -32,7 +32,7 @@ public class CountDownLatchExample {
         }
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    static void main(String[] args) throws InterruptedException {
         int workers = 4;
         CountDownLatch latch = new CountDownLatch(workers);
         AtomicLong total = new AtomicLong(0);

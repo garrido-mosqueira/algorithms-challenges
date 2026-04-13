@@ -53,7 +53,7 @@ public class AtomicCounter {
     /**
      * Main demonstrates atomic operations performance
      */
-    public static void main(String[] args) throws InterruptedException {
+    static void main() throws InterruptedException {
         AtomicCounter counter = new AtomicCounter();
         int numThreads = 10;
         int incrementsPerThread = 100000;

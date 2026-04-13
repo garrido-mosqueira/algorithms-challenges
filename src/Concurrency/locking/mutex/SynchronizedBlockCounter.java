@@ -30,7 +30,7 @@ public class SynchronizedBlockCounter {
     /**
      * Main demonstrates thread safety with synchronized blocks
      */
-    public static void main(String[] args) throws InterruptedException {
+    static void main() throws InterruptedException {
         SynchronizedBlockCounter counter = new SynchronizedBlockCounter();
         int numThreads = 10;
         int incrementsPerThread = 10000;

@@ -25,7 +25,7 @@ public class PhasedBankTransfer {
         }
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    static void main(String[] args) throws InterruptedException {
         int accountCount = 5;
         int phases = 3;
 

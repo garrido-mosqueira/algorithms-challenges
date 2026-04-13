@@ -5,7 +5,7 @@ package Concurrency.locking.mutex;
  */
 public class MyCounterExample {
 
-    static void main(String[] args) throws InterruptedException {
+    static void main() throws InterruptedException {
         MyCounter counter = new MyCounter();
         int incrementsPerThread = 1_000_000;
 

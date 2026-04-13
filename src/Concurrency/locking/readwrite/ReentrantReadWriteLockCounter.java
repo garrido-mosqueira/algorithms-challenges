@@ -42,7 +42,7 @@ public class ReentrantReadWriteLockCounter {
     /**
      * Main demonstrates concurrent read-heavy scenario
      */
-    public static void main(String[] args) throws InterruptedException {
+    static void main() throws InterruptedException {
         ReentrantReadWriteLockCounter counter = new ReentrantReadWriteLockCounter();
         int numReaderThreads = 8;
         int numWriterThreads = 2;
