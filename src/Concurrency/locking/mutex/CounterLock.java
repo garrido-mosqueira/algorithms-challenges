@@ -9,8 +9,8 @@ public class CounterLock {
     private final Lock lock = new ReentrantLock();
 
     public void inc() {
+        lock.lock();
         try {
-            lock.lock();
             this.count++;
         } finally {
             lock.unlock();
@@ -18,8 +18,8 @@ public class CounterLock {
     }
 
     public long getCount() {
+        lock.lock();
         try {
-            lock.lock();
             return this.count;
         } finally {
             lock.unlock();

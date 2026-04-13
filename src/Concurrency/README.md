@@ -40,6 +40,7 @@ Concurrency/
 │   │   └── AtomicCounter.java
 │   ├── mutex/
 │   │   ├── CounterLock.java
+│   │   ├── CounterLockExample.java
 │   │   ├── MyCounter.java
 │   │   ├── MyCounterExample.java
 │   │   └── SynchronizedBlockCounter.java
@@ -296,6 +297,12 @@ Trade-off:
 
 - more flexible
 - easier to misuse than `synchronized`
+
+Run:
+
+```bash
+java -cp src Concurrency.locking.mutex.CounterLockExample
+```
 
 ---
 
@@ -607,6 +614,7 @@ java -cp src Concurrency.runner.ConcurrencyMechanismsRunner
 java -cp src Concurrency.basics.ThreadExample
 java -cp src Concurrency.basics.RaceConditions
 java -cp src Concurrency.locking.mutex.MyCounterExample
+java -cp src Concurrency.locking.mutex.CounterLockExample
 java -cp src Concurrency.locking.mutex.SynchronizedBlockCounter
 java -cp src Concurrency.locking.lockfree.AtomicCounter
 java -cp src Concurrency.locking.readwrite.ReentrantReadWriteLockCounter

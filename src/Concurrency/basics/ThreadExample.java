@@ -2,7 +2,7 @@ package Concurrency.basics;
 
 public class ThreadExample {
 
-    public static void main(String[] args) throws InterruptedException {
+    static void main() throws InterruptedException {
         Runnable runnable = new MyRunnable();
 
         Thread thread1 = new Thread(runnable, "thread 1");
