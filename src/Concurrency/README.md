@@ -196,7 +196,9 @@ What it teaches:
 
 - shared state problems are often subtle
 - even when using concurrent collections, your *multi-step logic* can still need synchronization
-- “thread-safe collection” does not automatically make a compound operation thread-safe
+- "thread-safe collection" does not automatically make a compound operation thread-safe
+
+📄 **Full explanation:** [basics/RaceConditions.md](basics/RaceConditions.md)
 
 Run:
 
