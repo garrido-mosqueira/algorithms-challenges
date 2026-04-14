@@ -52,6 +52,12 @@ Concurrency/
 │   ├── CountDownLatchExample.java
 │   ├── PhasedBankTransfer.java
 │   └── SemaphoreCounter.java
+├── patterns/
+│   └── singleton/
+│       ├── DoubleCheckedLockingSingleton.java
+│       ├── EnumSingleton.java
+│       ├── InitializationOnDemandSingleton.java
+│       └── SingletonPatterns.md
 ├── runner/
 │   └── ConcurrencyMechanismsRunner.java
 └── README.md
@@ -148,6 +154,13 @@ Use this package to learn:
 - limiting concurrency with permits
 - waiting for phases to complete
 - making multiple threads move through a workflow together
+
+### `Concurrency.patterns.singleton`
+Use this package to learn:
+
+- how to use concurrency controls to safely instantiate global singletons
+- the `volatile` keyword and double-checked locking
+- lock-free thread-safe creation using inner static classes and enums
 
 ---
 
@@ -628,6 +641,17 @@ Goal:
 
 - shift from “protecting data” to “coordinating progress”
 
+### Stage 5 — concurrent design patterns
+
+15. `Concurrency.patterns.singleton.DoubleCheckedLockingSingleton`
+16. `Concurrency.patterns.singleton.InitializationOnDemandSingleton`
+17. `Concurrency.patterns.singleton.EnumSingleton`
+
+Goal:
+
+- understand how concurrency impacts object instantiation
+- learn how to correctly design global shared state
+
 ---
 
 ## 9. Compile and run 🧪
@@ -687,6 +711,11 @@ java -cp src Concurrency.coordination.PhasedBankTransfer
 
 - Am I controlling access, or am I controlling timing/order?
 - Is this reusable (`CyclicBarrier`) or one-shot (`CountDownLatch`)?
+
+### For singleton examples
+
+- Why is the `volatile` keyword absolutely necessary in double-checked locking?
+- How does the classloader guarantee safety in the Initialization-on-Demand holder?
 
 ---
 
