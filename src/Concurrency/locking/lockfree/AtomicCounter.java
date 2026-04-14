@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class AtomicCounter {
 
-    private AtomicLong counter = new AtomicLong(0);
+    private final AtomicLong counter = new AtomicLong(0);
 
     /**
      * Atomically increments by 1 using Compare-And-Swap
@@ -19,13 +19,6 @@ public class AtomicCounter {
      */
     public void increment() {
         counter.incrementAndGet();
-    }
-
-    /**
-     * Alternative: Can also use getAndIncrement() which returns old value
-     */
-    public long incrementAndGetOld() {
-        return counter.getAndIncrement();
     }
 
     /**
