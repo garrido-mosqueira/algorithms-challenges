@@ -12,7 +12,10 @@ public class DoubleCheckedLockingSingleton {
     private static volatile DoubleCheckedLockingSingleton instance;
 
     private DoubleCheckedLockingSingleton() {
-        // private constructor to prevent external instantiation
+        // Prevent instantiation via reflection
+        if (instance != null) {
+            throw new IllegalStateException("Instance already exists! Use getInstance() method.");
+        }
     }
 
     public static DoubleCheckedLockingSingleton getInstance() {

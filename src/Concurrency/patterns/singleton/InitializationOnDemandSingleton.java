@@ -9,7 +9,10 @@ package Concurrency.patterns.singleton;
 public class InitializationOnDemandSingleton {
 
     private InitializationOnDemandSingleton() {
-        // private constructor to prevent external instantiation
+        // Prevent instantiation via reflection
+        if (SingletonHolder.INSTANCE != null) {
+            throw new IllegalStateException("Instance already exists! Use getInstance() method.");
+        }
     }
 
     /**

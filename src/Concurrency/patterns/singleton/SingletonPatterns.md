@@ -18,8 +18,36 @@ This is the classic approach that combines lazy initialization with performance 
 3. **Second Check (With Lock):** Check if the instance is still null. Another thread might have created it while this thread was waiting for the lock.
 4. **Create:** If still null, safely create the instance.
 
-### The Critical `volatile` Keyword
-The `instance` variable **must** be declared `volatile`. Without `volatile`, the JVM or CPU might reorder the instructions for creating the object. A thread could see a non-null reference to the object *before* its constructor has fully finished executing, leading to subtle and dangerous bugs. `volatile` prevents this instruction reordering (establishing a "happens-before" relationship).
+### Preventing Reflection Attacks
+Even with a private constructor, an attacker can use Java Reflection (`Constructor.setAccessible(true)`) to invoke the constructor and create a second instance. To prevent this, the private constructor explicitly checks if the instance already exists and throws an `IllegalStateException` if it does.
+
+### The Critical `volatile` Keyword and Object Creation States
+To understand why `volatile` is absolutely crucial in this pattern, you must understand what happens under the hood when Java executes `instance = new DoubleCheckedLockingSingleton();`.
+
+Creating an object is **not** a single atomic step. It generally consists of three distinct states/instructions at the machine level:
+1. **Allocate memory:** Allocate the blank memory space for the object.
+2. **Initialize object:** Call the constructor to set up the object's fields.
+3. **Assign reference:** Point the `instance` variable to the newly allocated memory space.
+
+**The Problem: Instruction Reordering**
+For performance reasons, modern compilers and CPUs are allowed to reorder instructions as long as it doesn't break the logic for a *single thread*. 
+Because Steps 2 and 3 don't directly depend on each other, the JVM is allowed to execute them in this order:
+1. Allocate memory.
+2. **Assign reference** (point `instance` to the memory).
+3. **Initialize object** (run the constructor).
+
+**The Concurrency Disaster**
+Imagine Thread A and Thread B:
+1. Thread A enters the synchronized block and reaches the creation step.
+2. The JVM reorders the instructions. It allocates memory and **assigns the reference** to `instance`.
+3. *Context switch!* Thread A is paused before it can run the constructor.
+4. Thread B enters `getInstance()`. It checks `if (instance == null)`.
+5. Because Thread A already assigned the reference in Step 2, `instance` is **not null**.
+6. Thread B returns the `instance` and starts trying to use it.
+7. **CRASH/BUGS!** Thread B is now using a "partially constructed object" whose constructor hasn't run yet. Its fields are all empty or in an invalid state.
+
+**The Solution:**
+Declaring the variable as `private static volatile DoubleCheckedLockingSingleton instance;` solves this. The `volatile` keyword establishes a **happens-before** guarantee. It strictly forbids the JVM from reordering the assignment of the reference (Step 3) before the object is fully initialized (Step 2). It guarantees that any thread reading `instance` will only ever see a fully constructed object.
 
 **Pros:** Lazy loading, excellent performance after initialization.
 **Cons:** Verbose, complex to implement correctly due to the necessity of `volatile`.
@@ -38,6 +66,9 @@ It leverages the Java ClassLoader's guarantee that a class is initialized only o
 1. The main `InitializationOnDemandSingleton` class is loaded, but its inner static class (`SingletonHolder`) is *not* loaded yet.
 2. When a thread first calls `getInstance()`, it references `SingletonHolder.INSTANCE`.
 3. This triggers the ClassLoader to load and initialize `SingletonHolder`. The JVM handles the synchronization during this phase, creating the single instance safely without explicit `synchronized` blocks.
+
+### Preventing Reflection Attacks
+Just like the Double-Checked Locking approach, we add a check inside the private constructor to throw an `IllegalStateException` if `SingletonHolder.INSTANCE` is not null, actively blocking Reflection API abuse.
 
 **Pros:** 100% thread-safe without explicit synchronization overhead, clean, simple, lazy-loaded.
 **Cons:** None, really. It is the preferred approach for lazy initialization.
@@ -58,7 +89,7 @@ By declaring your Singleton as an `enum` with a single value (`INSTANCE`), you d
 **Pros:**
 *   **Inherent Thread Safety:** The JVM guarantees it.
 *   **Serialization Safe:** Standard Singletons can be accidentally duplicated if serialized and deserialized. Enums handle this automatically.
-*   **Reflection Safe:** Standard Singletons can be bypassed using Java Reflection to call the private constructor. Enums prevent reflection from instantiating them.
+*   **Reflection Safe:** Standard Singletons can be bypassed using Java Reflection to call the private constructor. Enums completely prevent reflection from instantiating them by default at the JVM level (no custom constructor logic needed!).
 *   **Concise:** The most compact code.
 
 **Cons:**
