@@ -3,10 +3,10 @@ package Concurrency.locking.mutex;
 /**
  * Demonstrates using CounterLock safely from multiple threads.
  */
-public class CounterLockExample {
+public class ReentrantCounterLockExample {
 
     static void main() throws InterruptedException {
-        CounterLock counter = new CounterLock();
+        ReentrantCounterLock counter = new ReentrantCounterLock();
         int numThreads = 4;
         int incrementsPerThread = 250_000;
 
@@ -30,7 +30,7 @@ public class CounterLockExample {
         System.out.println("Match: " + (actual == expected));
     }
 
-    private static void incrementCounter(CounterLock counter, int incrementsPerThread) {
+    private static void incrementCounter(ReentrantCounterLock counter, int incrementsPerThread) {
         for (int i = 0; i < incrementsPerThread; i++) {
             counter.inc();
         }

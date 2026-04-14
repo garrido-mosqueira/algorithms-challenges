@@ -1,6 +1,6 @@
 package Concurrency.locking.mutex;
 
-public class MyCounter {
+public class SynchronizedCounter {
 
     private long counter = 0;
 

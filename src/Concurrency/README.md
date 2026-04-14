@@ -245,7 +245,7 @@ What it teaches:
 Run:
 
 ```bash
-java -cp src Concurrency.locking.mutex.MyCounterExample
+java -cp src Concurrency.locking.mutex.SynchronizedCounterExample
 ```
 
 ---
@@ -302,7 +302,7 @@ Trade-off:
 Run:
 
 ```bash
-java -cp src Concurrency.locking.mutex.CounterLockExample
+java -cp src Concurrency.locking.mutex.ReentrantCounterLockExample
 ```
 
 ---
@@ -595,10 +595,10 @@ Goal:
 
 ### Stage 2 — classic mutual exclusion
 
-4. `Concurrency.locking.mutex.MyCounter`
-5. `Concurrency.locking.mutex.MyCounterExample`
+4. `Concurrency.locking.mutex.SynchronizedCounter`
+5. `Concurrency.locking.mutex.SynchronizedCounterExample`
 6. `Concurrency.locking.mutex.SynchronizedBlockCounter`
-7. `Concurrency.locking.mutex.CounterLock`
+7. `Concurrency.locking.mutex.ReentrantCounterLock`
 
 Goal:
 
@@ -650,8 +650,8 @@ java -cp src Concurrency.runner.ConcurrencyMechanismsRunner
 ```bash
 java -cp src Concurrency.basics.ThreadExample
 java -cp src Concurrency.basics.RaceConditions
-java -cp src Concurrency.locking.mutex.MyCounterExample
-java -cp src Concurrency.locking.mutex.CounterLockExample
+java -cp src Concurrency.locking.mutex.SynchronizedCounterExample
+java -cp src Concurrency.locking.mutex.ReentrantCounterLockExample
 java -cp src Concurrency.locking.mutex.SynchronizedBlockCounter
 java -cp src Concurrency.locking.lockfree.AtomicCounter
 java -cp src Concurrency.locking.lockfree.LongAdderExample

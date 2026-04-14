@@ -3,10 +3,10 @@ package Concurrency.locking.mutex;
 /**
  * Demonstrates using a synchronized counter from multiple threads.
  */
-public class MyCounterExample {
+public class SynchronizedCounterExample {
 
     static void main() throws InterruptedException {
-        MyCounter counter = new MyCounter();
+        SynchronizedCounter counter = new SynchronizedCounter();
         int incrementsPerThread = 1_000_000;
 
         Thread thread1 = new Thread(() -> incrementCounter(counter, incrementsPerThread), "counter-thread-1");
@@ -24,7 +24,7 @@ public class MyCounterExample {
         System.out.println("Match: " + (counter.getCounter() == expected));
     }
 
-    private static void incrementCounter(MyCounter counter, int incrementsPerThread) {
+    private static void incrementCounter(SynchronizedCounter counter, int incrementsPerThread) {
         for (int i = 0; i < incrementsPerThread; i++) {
             counter.increment();
         }

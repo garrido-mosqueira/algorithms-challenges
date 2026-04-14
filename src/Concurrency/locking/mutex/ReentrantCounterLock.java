@@ -3,7 +3,7 @@ package Concurrency.locking.mutex;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class CounterLock {
+public class ReentrantCounterLock {
 
     private long count = 0;
     private final Lock lock = new ReentrantLock();
