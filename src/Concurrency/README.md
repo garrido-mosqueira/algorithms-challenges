@@ -37,7 +37,8 @@ Concurrency/
 │   └── ThreadExample.java
 ├── locking/
 │   ├── lockfree/
-│   │   └── AtomicCounter.java
+│   │   ├── AtomicCounter.java
+│   │   └── LongAdderExample.java
 │   ├── mutex/
 │   │   ├── CounterLock.java
 │   │   ├── CounterLockExample.java
@@ -124,6 +125,7 @@ Use this package to learn:
 - lock-free counters
 - CAS-style atomic updates
 - why atomics are often the fastest option for simple state
+- how `LongAdder` solves high-contention issues with `AtomicLong`
 
 ### `Concurrency.locking.mutex`
 Use this package to learn:
@@ -326,11 +328,37 @@ Avoid when:
 
 - multiple values must change together atomically
 - you need richer invariants across several fields
+- there is extremely high contention (use `LongAdder` instead)
 
 Run:
 
 ```bash
 java -cp src Concurrency.locking.lockfree.AtomicCounter
+```
+
+---
+
+### `LongAdderExample`
+**Purpose:** Highly scalable lock-free counter for high-contention environments.
+
+What it teaches:
+
+- How `LongAdder` solves the CAS retry (spinlock) problem of `AtomicLong` under heavy contention.
+- The trade-off between strict consistency (`AtomicLong.get()`) and eventual consistency (`LongAdder.sum()`).
+
+Use when:
+
+- You have a highly concurrent environment where many threads frequently update a common sum (e.g., metrics, statistics).
+
+Avoid when:
+
+- You need strict, absolute consistency at the exact millisecond of reading.
+- You need advanced atomic operations like `compareAndSet()`.
+
+Run:
+
+```bash
+java -cp src Concurrency.locking.lockfree.LongAdderExample
 ```
 
 ---
@@ -485,17 +513,18 @@ java -cp src Concurrency.runner.ConcurrencyMechanismsRunner
 
 ## 6. Mechanism comparison 📊
 
-| Mechanism | Main idea | Best workload | Strength | Weakness |
-|---|---|---|---|---|
-| `synchronized` method | whole-method mutex | simple shared state | easiest to reason about | coarse lock scope |
-| `synchronized` block | critical-section mutex | simple shared state with narrower lock scope | more control | slightly more design overhead |
-| `ReentrantLock` | explicit mutex | advanced mutual exclusion | flexible API | easier to misuse |
-| `AtomicLong` / atomics | lock-free single-variable updates | very simple shared state | high throughput | not enough for rich multi-field invariants |
-| `ReadWriteLock` | many readers, one writer | read-heavy workloads | reader concurrency | overhead if writes are common |
-| `StampedLock` | optimistic + read/write lock modes | very read-heavy workloads | can outperform classic read-write lock | more complex |
-| `Semaphore` | bounded concurrent access | resource pools | controls N-way access | not a drop-in mutex substitute |
-| `CountDownLatch` | wait for completion | one-shot coordination | simple workflow sync | cannot be reused |
-| `CyclicBarrier` | phase synchronization | iterative/round-based work | reusable coordination point | all parties must arrive |
+| Mechanism | Main idea | Best workload | Strength | Weakness | Consistency |
+|---|---|---|---|---|---|
+| `synchronized` method | whole-method mutex | simple shared state | easiest to reason about | coarse lock scope | Strict |
+| `synchronized` block | critical-section mutex | simple shared state with narrower lock scope | more control | slightly more design overhead | Strict |
+| `ReentrantLock` | explicit mutex | advanced mutual exclusion | flexible API | easier to misuse | Strict |
+| `AtomicLong` | lock-free single-variable updates | very simple shared state | high throughput | CAS retry loop wastes CPU under high contention | **Strict** |
+| `LongAdder` | distributed lock-free updates | high-contention counters | extremely scalable | no complex operations (e.g., CAS) | **Eventual** (`sum()` reads) |
+| `ReadWriteLock` | many readers, one writer | read-heavy workloads | reader concurrency | overhead if writes are common | Strict |
+| `StampedLock` | optimistic + read/write lock modes | very read-heavy workloads | can outperform classic read-write lock | more complex | Strict |
+| `Semaphore` | bounded concurrent access | resource pools | controls N-way access | not a drop-in mutex substitute | Strict |
+| `CountDownLatch` | wait for completion | one-shot coordination | simple workflow sync | cannot be reused | - |
+| `CyclicBarrier` | phase synchronization | iterative/round-based work | reusable coordination point | all parties must arrive | - |
 
 ---
 
@@ -506,6 +535,13 @@ java -cp src Concurrency.runner.ConcurrencyMechanismsRunner
 - you only need a counter or simple atomic variable
 - state is small and independent
 - performance matters
+- you need strict consistency (`get()`)
+
+### Choose `LongAdder` when
+
+- you need a highly concurrent counter (e.g., tracking metrics/hits)
+- thread contention is very high
+- you only need eventual consistency for reads (`sum()`)
 
 ### Choose `MyCounter` or `SynchronizedBlockCounter` when
 
@@ -572,19 +608,21 @@ Goal:
 ### Stage 3 — lock-free and performance-oriented thinking
 
 8. `Concurrency.locking.lockfree.AtomicCounter`
-9. `Concurrency.locking.readwrite.ReentrantReadWriteLockCounter`
-10. `Concurrency.locking.readwrite.StampedLockCounter`
+9. `Concurrency.locking.lockfree.LongAdderExample`
+10. `Concurrency.locking.readwrite.ReentrantReadWriteLockCounter`
+11. `Concurrency.locking.readwrite.StampedLockCounter`
 
 Goal:
 
 - learn when lock-free wins
 - learn why workload shape matters
+- learn how high contention changes lock-free designs
 
 ### Stage 4 — coordination patterns
 
-11. `Concurrency.coordination.CountDownLatchExample`
-12. `Concurrency.coordination.SemaphoreCounter`
-13. `Concurrency.coordination.PhasedBankTransfer`
+12. `Concurrency.coordination.CountDownLatchExample`
+13. `Concurrency.coordination.SemaphoreCounter`
+14. `Concurrency.coordination.PhasedBankTransfer`
 
 Goal:
 
@@ -616,6 +654,7 @@ java -cp src Concurrency.locking.mutex.MyCounterExample
 java -cp src Concurrency.locking.mutex.CounterLockExample
 java -cp src Concurrency.locking.mutex.SynchronizedBlockCounter
 java -cp src Concurrency.locking.lockfree.AtomicCounter
+java -cp src Concurrency.locking.lockfree.LongAdderExample
 java -cp src Concurrency.locking.readwrite.ReentrantReadWriteLockCounter
 java -cp src Concurrency.locking.readwrite.StampedLockCounter
 java -cp src Concurrency.coordination.CountDownLatchExample
@@ -637,6 +676,7 @@ java -cp src Concurrency.coordination.PhasedBankTransfer
 
 - Is the operation truly representable as a single atomic update?
 - Would a second shared field break the design?
+- Is contention high enough to justify `LongAdder` over `AtomicLong`?
 
 ### For read/write locking
 
