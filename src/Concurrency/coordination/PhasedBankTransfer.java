@@ -25,7 +25,7 @@ public class PhasedBankTransfer {
         }
     }
 
-    static void main(String[] args) throws InterruptedException {
+    static void main() throws InterruptedException {
         int accountCount = 5;
         int phases = 3;
 
@@ -40,7 +40,8 @@ public class PhasedBankTransfer {
         Thread[] workers = new Thread[accountCount];
         for (int i = 0; i < accountCount; i++) {
             final int accountId = i;
-            workers[i] = new Thread(() -> runPhases(accounts[accountId], accountId, phases, barrier));
+            workers[i] = new Thread(() ->
+                    runPhases(accounts[accountId], accountId, phases, barrier));
             workers[i].start();
         }
 
