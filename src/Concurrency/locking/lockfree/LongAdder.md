@@ -1,31 +1,60 @@
-# LongAdder & High-Contention Operations
+# LongAdder and High-Contention Counters
 
-## Overview
-`LongAdder` is a highly scalable, lock-free counter introduced in Java 8 as part of the `java.util.concurrent.atomic` package. It is designed to be a better alternative to `AtomicLong` in scenarios where multiple threads are frequently updating a common sum.
+## Navigation
 
-## The Problem with AtomicLong
-While `AtomicLong` is lock-free and uses Compare-And-Swap (CAS) for updates, it can suffer from performance degradation under **high contention**.
-- When many threads try to update the exact same variable simultaneously, most of the CAS operations will fail because another thread just changed the value.
-- Failed threads enter a retry loop (spinlock), wasting CPU cycles continuously failing and retrying until they finally succeed.
+- [Concurrency README](../../README.md)
+- [Generic concurrency patterns](../../ConcurrencyPatterns.md)
+- [Atomic counter guide](AtomicCounter.md)
+- [Read-write locks](../readwrite/ReadWriteLock.md)
 
-## How LongAdder Solves This
-Instead of a single memory location, `LongAdder` maintains a base value and an **array of variables (called "cells")**.
-1. **Low Contention:** If there's no contention, updates are applied directly to the base value (behaving similarly to `AtomicLong`).
-2. **High Contention:** If a thread fails to update the base value via CAS (indicating contention), `LongAdder` hashes the thread to a specific cell in the array and performs the CAS operation on that cell instead.
-3. This approach effectively distributes the updates across multiple memory locations, drastically reducing contention and minimizing wasted CPU spin time.
+## Why this matters
 
-## Calculating the Total Sum
-To get the current total sum (via the `sum()` or `longValue()` methods), `LongAdder` simply adds the base value and the values of all the individual cells together.
+`LongAdder` is built for counters that receive heavy concurrent increments where `AtomicLong` CAS retries become expensive.
 
-**Important Note:** The `sum()` method is *eventually consistent*. Since there are no locks, if threads are actively updating the cells while `sum()` is executing, the returned value might not reflect the absolute exact state at that split millisecond. Therefore, it's best suited for collecting statistics, metrics, and histograms, rather than for strict synchronization logic where the exact value is required for correctness.
+## Core model
 
-## Pros & Cons
+Instead of a single hot value, `LongAdder` uses:
 
-### Advantages
-1. **Exceptional Throughput:** Significantly faster than `AtomicLong` under heavy thread contention.
-2. **Reduced CPU Usage:** Eliminates the CPU cycles wasted on failed CAS retries.
+- a base value for low contention
+- striped internal cells for high contention
 
-### Disadvantages
-1. **Higher Memory Footprint:** Allocates an array of cells, which takes slightly more memory than a single `AtomicLong`.
-2. **Eventual Consistency on Reads:** The `sum()` operation is not strictly atomic if concurrent updates are happening.
-3. **Limited Operations:** It primarily supports addition/subtraction. It doesn't support operations like `compareAndSet`, which `AtomicLong` does.
+Threads update different cells, which lowers collision probability and improves write throughput.
+
+## Why `AtomicLong` can degrade under contention
+
+With many writers on one value:
+
+1. Thread reads old value
+2. Another thread wins CAS first
+3. First thread CAS fails and retries
+4. Repeated failures consume CPU
+
+`LongAdder` reduces this by distributing writes.
+
+## Trade-offs
+
+- Better write scalability under heavy contention
+- `sum()` is eventually consistent during concurrent updates
+- Does not expose full CAS-style API like `compareAndSet`
+- Uses more memory than a single `AtomicLong`
+
+## Decision guidance
+
+- Choose `LongAdder` for metrics, telemetry, hit counters, and frequent increments
+- Choose `AtomicLong` when exact immediate reads or CAS semantics are required
+
+## Repository mapping
+
+- [LongAdderExample.java](LongAdderExample.java): practical high-contention counter demonstration
+
+## Run
+
+```bash
+java -cp src Concurrency.locking.lockfree.LongAdderExample
+```
+
+## Study next
+
+- [AtomicCounter.md](AtomicCounter.md)
+- [ReadWriteLock.md](../readwrite/ReadWriteLock.md)
+

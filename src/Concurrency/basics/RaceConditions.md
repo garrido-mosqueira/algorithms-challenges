@@ -1,57 +1,45 @@
-# RaceConditions.java — Explained
+# RaceConditions.java Explained
 
-## The core idea
+## Navigation
 
-> **A thread-safe collection does not make a multi-step operation thread-safe.**
+- [Concurrency README](../README.md)
+- [Generic concurrency patterns](../ConcurrencyPatterns.md)
+- [Interview topics](../InterviewTopics.md)
+- [RaceConditions.java](RaceConditions.java)
 
-The demo uses a `ConcurrentHashMap` that toggles a single key back and forth.
-Each thread ping-pongs the key: one iteration puts it in, the next removes it.
-This makes the race easy to observe and count.
+## Why this example matters
 
----
+It demonstrates a critical interview concept: **thread-safe collection operations are not the same as thread-safe business logic**.
 
-## What each thread does every iteration
+## Core model
 
-```
-if key exists  → remove it
-if key missing → put it back
-```
+`ConcurrentHashMap` guarantees thread safety for each individual operation (`containsKey`, `put`, `remove`).
+It does **not** make multi-step check-then-act logic atomic across multiple operations.
 
-With 2 threads alternating, the map should stay in sync.
-But there is a hidden problem when there is no outer lock.
+## The race condition in this demo
 
----
+Without an outer lock, both threads can pass the check before either remove completes:
 
-## Why the race happens (without `synchronized`)
-
-`containsKey` and `remove` are two separate calls.
-`ConcurrentHashMap` makes each one individually safe, but **nothing prevents another thread from slipping in between them**:
-
-```
-Thread-1: containsKey("key") → true    ✓ key is there
-Thread-2: containsKey("key") → true    ✓ key still there
-Thread-1: remove("key")      → "value"
-Thread-2: remove("key")      → null    ← key already gone!
+```text
+Thread-1: containsKey("key") -> true
+Thread-2: containsKey("key") -> true
+Thread-1: remove("key")      -> "value"
+Thread-2: remove("key")      -> null
 ```
 
-The check and the act are two separate steps, not one atomic action.
-That gap is where the race lives.
+Both reads were valid at the time, but one subsequent action became stale.
 
----
+## How synchronization fixes it
 
-## What `synchronized(map)` fixes
+Wrapping the full check + action sequence in one synchronized block turns it into a single critical section:
 
-Wrapping both calls in `synchronized(map)` forces the entire check-then-act
-block to run as **one uninterruptible unit**.
-No other thread can enter the block while one thread is inside it.
-
-```java
-// UNSAFE — two separate steps, gap between them
+```
+// Unsafe: check and action are separate steps
 if (map.containsKey("key")) {
-    map.remove("key");          // ← another thread can strike here
+    map.remove("key");
 }
 
-// SAFE — one atomic compound operation
+// Safe: check + action execute atomically at app level
 synchronized (map) {
     if (map.containsKey("key")) {
         map.remove("key");
@@ -59,31 +47,16 @@ synchronized (map) {
 }
 ```
 
----
+## Expected output pattern
 
-## Demo output
+- `withSync = false`: non-zero null removals (race is observable)
+- `withSync = true`: zero null removals (compound operation protected)
 
-| Run | What happens | Output |
-|---|---|---|
-| `withSync = false` | Threads interleave freely | `Null removals: 28176  ← RACE CONDITION` |
-| `withSync = true`  | Each compound op is atomic | `Null removals: 0  ✓ safe` |
+## Common interview takeaway
 
----
+When logic says "check condition, then act based on that condition", assume you need synchronization around the full sequence.
 
-## Code structure
+## Study next
 
-| Method | Role |
-|---|---|
-| `main()` | Runs both demos back to back |
-| `runDemo(withSync)` | Creates the map, starts both threads, prints the summary |
-| `task(...)` | Per-thread loop; routes to `synchronized` or bare `step()` based on the flag |
-| `step(...)` | The single compound operation shared by both variants |
-
----
-
-## Key takeaway
-
-`ConcurrentHashMap` protects individual calls (`put`, `remove`, `containsKey`).
-It does **not** protect a sequence of calls that must be treated as one unit.
-Whenever your logic says *"check, then act based on that check"*, you need an outer lock.
-
+- [VolatileStopSignal.java](VolatileStopSignal.java) for visibility guarantees
+- [Mutex.md](../locking/mutex/Mutex.md) for lock strategy trade-offs

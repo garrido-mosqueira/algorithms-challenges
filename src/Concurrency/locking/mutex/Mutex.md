@@ -1,45 +1,74 @@
 # Mutex (Mutual Exclusion)
 
-## Overview
-A **Mutex** (Mutual Exclusion) is a fundamental concurrency control mechanism used to prevent race conditions. It ensures that only one thread can execute a specific section of code (called a "critical section") at any given time.
+## Navigation
 
-If a thread holds a mutex lock, any other thread attempting to acquire that same lock will block (wait) until the first thread releases it.
+- [Concurrency README](../../README.md)
+- [Generic concurrency patterns](../../ConcurrencyPatterns.md)
+- [Interview topics](../../InterviewTopics.md)
+- [Read-write locks](../readwrite/ReadWriteLock.md)
 
-## The Problem It Solves
-When multiple threads read and write shared data concurrently, their operations can interleave in unpredictable ways, leading to data corruption (race conditions). A mutex serializes access to the shared state, making the operations appear atomic.
+## Why this matters
 
-## Types of Mutexes in Java
+A mutex guarantees that only one thread executes a critical section at a time.
+Without it, read-modify-write logic interleaves unpredictably and corrupts shared state.
 
-### 1. `synchronized` Methods (Intrinsic Locks)
-Every object in Java has a built-in, hidden lock called an "intrinsic lock" or "monitor lock". When you declare an entire instance method as `synchronized`, the thread automatically acquires the lock on the `this` object before executing the method.
+## Core concepts
 
-- **Example File:** `SynchronizedCounter.java`
-- **Pros:** Simple, readable, automatically releases the lock even if an exception occurs.
-- **Cons:** Very coarse-grained. The entire method is locked, potentially reducing concurrency more than necessary. It also limits you to locking the current object instance.
+- **Critical section:** code that touches shared mutable state
+- **Contention:** many threads competing for the same lock
+- **Deadlock:** threads wait forever due to circular lock dependency
 
-### 2. `synchronized` Blocks
-Instead of locking the whole method, you can lock just a specific block of code using `synchronized (lockObject)`. This allows you to protect only the true critical section.
+## Mechanisms covered in this package
 
-- **Example File:** `SynchronizedBlockCounter.java`
-- **Pros:** More fine-grained control. You can use a dedicated lock object (e.g., `private final Object lock = new Object();`) to avoid exposing your lock to outside code.
-- **Cons:** Slightly more verbose than synchronized methods.
+### 1) `synchronized` method
 
-### 3. Explicit Locks (`ReentrantLock`)
-Java provides explicit lock classes in the `java.util.concurrent.locks` package. The most common is `ReentrantLock`. A lock is "reentrant" if a thread that already holds the lock can acquire it again without deadlocking itself (useful for recursive method calls).
+**Repository file:** [SynchronizedCounter.java](SynchronizedCounter.java)
 
-- **Example File:** `ReentrantCounterLock.java`
-- **Pros:** Highly flexible. Provides advanced features like:
-  - `tryLock()`: Attempt to acquire the lock without blocking indefinitely.
-  - `lockInterruptibly()`: Allows a waiting thread to be interrupted.
-  - **Fairness:** Can be configured to grant the lock to the longest-waiting thread.
-- **Cons:** Requires manual management. You **must** release the lock in a `finally` block, or you risk deadlocks if an exception is thrown before `unlock()` is called.
+- Locks on `this` for the full method body
+- Most direct way to achieve correctness for simple state
+- Trade-off: coarse lock scope can limit throughput
 
-## Key Concepts
-*   **Critical Section:** The block of code that accesses shared state and must be protected by the mutex.
-*   **Deadlock:** Occurs when two or more threads are blocked forever, each waiting for a lock held by the other.
-*   **Contention:** Happens when many threads try to acquire the same lock simultaneously. High contention can degrade performance, as threads spend more time waiting than executing.
+### 2) `synchronized` block
 
-## When to Use Which?
-1. Start with the simplest approach: **`synchronized` blocks or methods**.
-2. If you need fine-grained control over the exact lines of code protected, use a **`synchronized` block** with a dedicated private lock object.
-3. If you need advanced features like timed lock attempts, interruptible waiting, or fairness, upgrade to a **`ReentrantLock`**.
+**Repository file:** [SynchronizedBlockCounter.java](SynchronizedBlockCounter.java)
+
+- Locks only the critical region
+- Often uses dedicated lock object to avoid exposing monitor ownership
+- Better lock granularity than method-level synchronization
+
+### 3) `ReentrantLock`
+
+**Repository file:** [ReentrantCounterLock.java](ReentrantCounterLock.java)
+
+- Explicit lock lifecycle: `lock()` and `unlock()`
+- Supports timed attempts (`tryLock`), interruptible waits, and fairness policy
+- Must always release in `finally` to avoid lock leaks
+
+### 4) Lock ordering for deadlock prevention
+
+**Repository file:** [DeadlockAvoidanceLockOrdering.java](DeadlockAvoidanceLockOrdering.java)
+
+- For operations requiring multiple locks, always acquire in one global order
+- This removes circular wait, one of the Coffman deadlock conditions
+- Works best when all call paths follow the same ordering contract
+
+## Choosing between mutex styles
+
+- Start with `synchronized` for clarity and correctness
+- Use block-level synchronization when only a subset of code needs locking
+- Choose `ReentrantLock` when you need timed/interruptible semantics
+- Enforce lock ordering whenever code may hold multiple locks concurrently
+
+## Run references
+
+```bash
+java -cp src Concurrency.locking.mutex.SynchronizedCounterExample
+java -cp src Concurrency.locking.mutex.SynchronizedBlockCounter
+java -cp src Concurrency.locking.mutex.ReentrantCounterLockExample
+java -cp src Concurrency.locking.mutex.DeadlockAvoidanceLockOrdering
+```
+
+## Study next
+
+- [AtomicCounter.md](../lockfree/AtomicCounter.md)
+- [ReadWriteLock.md](../readwrite/ReadWriteLock.md)

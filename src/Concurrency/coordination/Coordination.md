@@ -1,84 +1,158 @@
-# Thread Coordination 🚦
+# Thread Coordination
 
-## Overview
-While **Mutual Exclusion** (Locks, Mutexes) is about preventing threads from colliding when accessing shared data, **Thread Coordination** is about ordering and synchronizing the flow of execution between multiple threads. 
+## Navigation
 
-Instead of asking "Is it safe to touch this data?", coordination asks:
-- "Should I wait for someone else to finish first?"
-- "How many threads are allowed to do this at the same time?"
-- "Can we all pause here and move to the next phase together?"
+- [Concurrency README](../README.md)
+- [Generic concurrency patterns](../ConcurrencyPatterns.md)
+- [Interview topics](../InterviewTopics.md)
+- [Executors guide](../executors/Executors.md)
 
-Java provides several high-level synchronizers in the `java.util.concurrent` package to solve these exact workflow problems.
+## Why this matters
 
----
+Mutexes protect shared data. Coordination primitives control **when** threads proceed.
 
-## 1. `CountDownLatch` (The "Wait for Others" Pattern)
+Use coordination when the real question is one of workflow:
 
-**File:** `CountDownLatchExample.java`
+- Should this thread wait for other tasks?
+- How many threads may access a resource at once?
+- Should all workers move through phases together?
 
-A `CountDownLatch` allows one or more threads to wait until a set of operations being performed in other threads completes. 
+## 1) `CountDownLatch` - wait for one-time completion
 
-### How it Works
-1. You initialize it with a count (e.g., `new CountDownLatch(3)`).
-2. The waiting thread calls `latch.await()`. It will block here.
-3. The worker threads do their job and call `latch.countDown()` when finished.
-4. When the count reaches zero, the waiting thread is released and continues execution.
+**Repository file:** [CountDownLatchExample.java](CountDownLatchExample.java)
 
-**Key Characteristic: One-Shot**
-A `CountDownLatch` cannot be reset. Once the count reaches zero, it's done forever. If you need it again, you must create a new object.
+### Core model
 
-**Common Use Cases:**
-- A main thread waiting for 5 background services to initialize before starting the UI.
-- Waiting for several parallel network requests to finish before aggregating the results.
+One or more threads wait until a fixed number of events have occurred.
 
----
+### How it works
 
-## 2. `CyclicBarrier` (The "Meetup Point" Pattern)
+1. Create latch with count `N`
+2. Waiting thread calls `await()`
+3. Worker threads call `countDown()` as they finish
+4. Waiting thread resumes when count reaches zero
 
-**File:** `PhasedBankTransfer.java`
+### Strengths and trade-offs
 
-A `CyclicBarrier` allows a set of threads to all wait for each other to reach a common barrier point.
+- Very simple completion gate
+- One-shot only (cannot reset)
 
-### How it Works
-1. You initialize it with the number of parties (threads) (e.g., `new CyclicBarrier(4)`).
-2. Each thread does its work for the current phase and calls `barrier.await()`.
-3. The thread blocks until *all 4* threads have called `await()`.
-4. Once everyone arrives, the barrier is tripped, and all threads are released simultaneously to begin the next phase.
+### Common use cases
 
-**Key Characteristic: Reusable & Phased**
-Unlike a latch, a `CyclicBarrier` automatically resets after the barrier is tripped. This makes it perfect for iterative, phased computations. You can also provide a `Runnable` action that executes exactly once when the barrier is tripped, before the threads are released.
+- Wait for startup tasks before serving traffic
+- Aggregate parallel request results before final step
 
-**Common Use Cases:**
-- Multiplayer games (waiting for all players to finish loading before starting the match).
-- Parallel algorithms that process data in rounds/phases (e.g., matrix multiplication, physics simulations).
+### Run
 
----
+```bash
+java -cp src Concurrency.coordination.CountDownLatchExample
+```
 
-## 3. `Semaphore` (The "Bouncer / Permits" Pattern)
+## 2) `CyclicBarrier` - reusable phase sync point
 
-**File:** `SemaphoreCounter.java`
+**Repository file:** [PhasedBankTransfer.java](PhasedBankTransfer.java)
 
-A `Semaphore` controls access to a shared resource by maintaining a set of permits. It does not enforce exclusive ownership like a lock; it enforces a *capacity limit*.
+### Core model
 
-### How it Works
-1. You initialize it with a number of permits (e.g., `new Semaphore(5)`).
-2. Before accessing the resource, a thread calls `semaphore.acquire()`. If a permit is available, it takes one and proceeds. If not, it blocks until one is released.
-3. When finished, the thread calls `semaphore.release()`, putting the permit back into the pool.
+A fixed number of threads must all reach the barrier before any continue.
 
-**Key Characteristic: Non-Ownership**
-Unlike a `ReentrantLock`, a Semaphore does not track which thread owns a permit. Thread A can acquire a permit, and Thread B can technically release it! 
-*(Note: A Semaphore initialized with `1` permit acts exactly like a Mutual Exclusion lock, known as a "Binary Semaphore").*
+### How it works
 
-**Common Use Cases:**
-- Connection pools (e.g., limiting database connections to exactly 10 at a time).
-- Rate limiting or throttling incoming API requests.
+1. Create barrier with party count
+2. Each worker completes phase work and calls `await()`
+3. Threads block until all parties arrive
+4. Barrier trips, all threads continue to next phase
 
----
+### Strengths and trade-offs
 
-## Summary Comparison
+- Reusable across phases
+- Optional barrier action runs once per phase
+- Progress depends on all participants arriving
 
-| Synchronizer | Main Purpose | Reusable? | Metaphor |
-| :--- | :--- | :--- | :--- |
-| **`CountDownLatch`** | Wait for a specific number of events to happen before proceeding. | ❌ No | A starting gun waiting for 3 green lights. |
-| **`CyclicBarrier`** | Wait for a specific number of threads to reach the same point. | ✅ Yes | Friends hiking, waiting for everyone at every checkpoint. |
-| **`Semaphore`** | Limit the number of threads accessing a resource concurrently. | ✅ Yes | A nightclub bouncer letting exactly 50 people in at a time. |
+### Common use cases
+
+- Round-based parallel computation
+- Phase-controlled simulations and pipelines
+
+### Run
+
+```bash
+java -cp src Concurrency.coordination.PhasedBankTransfer
+```
+
+## 3) `Semaphore` - bounded concurrent access
+
+**Repository file:** [SemaphoreCounter.java](SemaphoreCounter.java)
+
+### Core model
+
+A semaphore manages a finite number of permits and limits concurrent access to a resource.
+
+### How it works
+
+1. Initialize with `N` permits
+2. Thread calls `acquire()` before using resource
+3. Thread calls `release()` when done
+
+### Strengths and trade-offs
+
+- Models resource pool capacity directly
+- Does not enforce ownership like a lock
+- Binary semaphore (`N = 1`) behaves similarly to mutex access gating
+
+### Common use cases
+
+- Database connection pools
+- Concurrency-limited external API usage
+
+### Run
+
+```bash
+java -cp src Concurrency.coordination.SemaphoreCounter
+```
+
+## 4) `BlockingQueue` - producer-consumer with backpressure
+
+**Repository file:** [BlockingQueueProducerConsumer.java](BlockingQueueProducerConsumer.java)
+
+### Core model
+
+Producers and consumers exchange work through a queue that blocks naturally under empty/full conditions.
+
+### How it works
+
+1. Producer uses `put()` to enqueue work
+2. Consumer uses `take()` to dequeue work
+3. Producer blocks when queue is full
+4. Consumer blocks when queue is empty
+
+### Strengths and trade-offs
+
+- Natural backpressure without manual `wait`/`notify`
+- Decouples producer and consumer throughput
+- Queue capacity and type (`ArrayBlockingQueue` vs `LinkedBlockingQueue`) must match workload
+
+### Common use cases
+
+- Worker queue architectures
+- Buffering between uneven subsystems
+
+### Run
+
+```bash
+java -cp src Concurrency.coordination.BlockingQueueProducerConsumer
+```
+
+## Summary comparison
+
+| Synchronizer | Main purpose | Reusable? | Typical fit |
+|---|---|---|---|
+| `CountDownLatch` | Wait for N one-time completions | No | Startup/shutdown gates |
+| `CyclicBarrier` | Wait for all threads at a phase point | Yes | Iterative phase workflows |
+| `Semaphore` | Limit concurrent access count | Yes | Resource pools |
+| `BlockingQueue` | Producer-consumer handoff and backpressure | Yes | Work queues/pipelines |
+
+## Study next
+
+- [Executors.md](../executors/Executors.md)
+- [Mutex.md](../locking/mutex/Mutex.md)
